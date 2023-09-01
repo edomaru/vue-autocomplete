@@ -1,13 +1,13 @@
 <template>
     <div>
-        <input type="text">
-        <ul>
-            <li v-for="result in searchResults" :key="result.name">{{ result.name }}</li>
+        <input type="text" v-model="search">
+        <ul v-show="searchResults.length">
+            <li v-for="result in searchResults" :key="result.name" @click="setSelected(result.name)">{{ result.name }}</li>
         </ul>
     </div>
 </template>
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     source: {
@@ -17,5 +17,21 @@ const props = defineProps({
     }
 })
 
-const searchResults = computed(() => props.source)
+const search = ref('')
+
+const searchResults = computed(() => {
+    if (search.value === '') {
+        return []
+    }
+
+    return props.source.filter(item => {
+        if (item.name.toLowerCase().includes(search.value.toLowerCase())) {
+            return item
+        }
+    })
+})
+
+const setSelected = item => {
+    search.value = item
+}
 </script>
