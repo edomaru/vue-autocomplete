@@ -1,9 +1,12 @@
 <script setup>
-
+import countries from './data/countries.json'
+import Autocomplete from './components/autocomplete/Autocomplete.vue';
 </script>
 
 <template>
-  <h1>Vue Autocomplete</h1>
+  <div>
+    <Autocomplete :source="countries" />
+  </div>
 </template>
 
 <style scoped>
