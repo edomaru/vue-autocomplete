@@ -1,7 +1,7 @@
 <template>
     <div>
-        <input type="text" v-model="search">
-        <ul v-show="searchResults.length">
+        <input type="text" :value="modelValue" @input="handleInput">
+        <ul v-show="searchResults.length && isOpen">
             <li v-for="result in searchResults" :key="result.name" @click="setSelected(result.name)">{{ result.name }}</li>
         </ul>
     </div>
@@ -14,10 +14,14 @@ const props = defineProps({
         type: Array,
         required: true,
         default: () => []
-    }
+    },
+    modelValue: String
 })
 
+const emit = defineEmits(['update:modelValue'])
+
 const search = ref('')
+const isOpen = ref(false)
 
 const searchResults = computed(() => {
     if (search.value === '') {
@@ -33,5 +37,13 @@ const searchResults = computed(() => {
 
 const setSelected = item => {
     search.value = item
+    isOpen.value = false
+    emit('update:modelValue', search.value)
+}
+
+const handleInput = event => {
+    search.value = event.target.value
+    isOpen.value = true
+    emit('update:modelValue', search.value)
 }
 </script>
